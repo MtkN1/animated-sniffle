@@ -330,6 +330,15 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="turn warnings into errors",
     )
+    p.add_argument(
+        "-l", "--language", help="target language for translated builds (e.g. ja)"
+    )
+    p.add_argument(
+        "--locale-dir",
+        type=Path,
+        default=Path("locale"),
+        help="directory holding <lang>/LC_MESSAGES/*.po (default: ./locale)",
+    )
     args = p.parse_args(argv)
 
     if not re.fullmatch(r"[\w.-]+/[\w.-]+", args.repo):
@@ -389,10 +398,16 @@ def main(argv: list[str] | None = None) -> int:
             "myst_heading_anchors": 6,
             "myst_fence_as_directive": ["mermaid"],
             "suppress_warnings": ["myst.strikethrough"],
+            # i18n: one catalog per page, no temp-dir paths in "#:" comments
+            "locale_dirs": [str(args.locale_dir.resolve())],
+            "gettext_compact": False,
+            "gettext_location": False,
             "ghdocs_repo": args.repo,
             "ghdocs_ref": ref,
             "ghdocs_base": base,
         }
+        if args.language:
+            overrides["language"] = args.language
         outdir = Path(args.outdir).resolve()
         app = Sphinx(
             srcdir=srcdir,

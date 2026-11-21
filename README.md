@@ -19,6 +19,21 @@ The HTML is written to `./_build/html`.
 | `--ref` | default branch | Branch or tag |
 | `--source DIR` | — | Use a local checkout instead of cloning |
 | `-W` | — | Treat warnings as errors |
+| `-l, --language` | — | Language for a translated build (e.g. `ja`) |
+| `--locale-dir` | `./locale` | Directory holding `<lang>/LC_MESSAGES/**/*.po` |
+
+## Translation (gettext / PO)
+
+```bash
+# 1. extract message catalogs (one .pot per page)
+uv run ghdocs.py acme/foo docs/ -b gettext -o _build/gettext
+# 2. create / update .po files
+uvx sphinx-intl update -p _build/gettext -l ja -d locale
+# 3. translate locale/ja/LC_MESSAGES/**/*.po, then build
+uv run ghdocs.py acme/foo docs/ -l ja -o _build/html/ja
+```
+
+Messages are Markdown source, so translations can contain Markdown links (`[テキスト](setup.md)`); they are resolved like the original.
 
 ## What it handles
 
