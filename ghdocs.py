@@ -5,6 +5,7 @@
 #     "myst-parser>=4",
 #     "linkify-it-py",
 #     "sphinxcontrib-mermaid",
+#     "shibuya",
 # ]
 # ///
 """Build a plain GitHub-style Markdown docs directory as a Sphinx site.
@@ -366,6 +367,19 @@ def main(argv: list[str] | None = None) -> int:
         overrides = {
             "project": args.repo.split("/")[1],
             "html_title": args.repo,
+            "html_theme": "shibuya",
+            "html_theme_options": {"github_url": f"https://github.com/{args.repo}"},
+            # shibuya: "Edit this page" / "Copy page" link back to the repository
+            # (sources live on GitHub; copying them would add a ".txt" suffix
+            # to the raw URL shibuya builds)
+            "html_copy_source": False,
+            "html_context": {
+                "source_type": "github",
+                "source_user": args.repo.split("/")[0],
+                "source_repo": args.repo.split("/")[1],
+                "source_version": ref,
+                "source_docs_path": "/",
+            },
             "root_doc": root_doc,
             "extensions": ["myst_parser", "sphinxcontrib.mermaid", EXT_NAME],
             "source_suffix": {s: "markdown" for s in MD_SUFFIXES},

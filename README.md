@@ -30,4 +30,6 @@ The HTML is written to `./_build/html`.
 - Pages without a heading get their file name as title
 - GFM: tables, task lists, strikethrough, autolinks, raw HTML, `> [!NOTE]` alerts, ` ```mermaid `
 
+Theme: [Shibuya](https://shibuya.lepture.com/) (fixed), with GitHub links ("Edit this page", repository card) pointing back to the source repository.
+
 Requires `git` (private repositories work with your git credentials).
